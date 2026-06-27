@@ -1,12 +1,10 @@
 import {
-
-    SlashCommandBuilder,
-
     ChatInputCommandInteraction,
-
-    PermissionFlagsBits
-
+    PermissionFlagsBits,
+    SlashCommandBuilder
 } from "discord.js";
+
+import { TicketPanel } from "../panels/ticketPanel";
 
 export default {
 
@@ -14,23 +12,25 @@ export default {
 
         .setName("setup")
 
-        .setDescription("Send Ticket Panel")
+        .setDescription("إرسال لوحة التذاكر")
 
         .setDefaultMemberPermissions(
-
             PermissionFlagsBits.Administrator
-
         ),
 
     async execute(
-
         interaction: ChatInputCommandInteraction
-
     ) {
+
+        if (!interaction.channel) return;
+
+        await interaction.channel.send(
+            TicketPanel()
+        );
 
         await interaction.reply({
 
-            content: "🚧 سيتم إنشاء لوحة التكت قريبًا.",
+            content: "✅ تم إرسال لوحة التذاكر بنجاح.",
 
             ephemeral: true
 
@@ -38,4 +38,4 @@ export default {
 
     }
 
-}
+};
