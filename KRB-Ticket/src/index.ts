@@ -1,46 +1,24 @@
 import "dotenv/config";
 
-import {
-    Client,
-    GatewayIntentBits,
-    Partials,
-    Collection
-} from "discord.js";
+import { client } from "./config/client";
 
-const client = new Client({
+import loadEvents from "./handlers/eventHandler";
+import loadCommands from "./handlers/commandHandler";
 
-    intents: [
+(async () => {
 
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+    try {
 
-    ],
+        await loadCommands(client);
 
-    partials: [
+        await loadEvents(client);
 
-        Partials.Channel,
-        Partials.Message,
-        Partials.User,
-        Partials.GuildMember
+        await client.login(process.env.TOKEN);
 
-    ]
+    } catch (error) {
 
-});
+        console.error(error);
 
-(client as any).commands = new Collection();
+    }
 
-client.once("ready", () => {
-
-    console.clear();
-
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("🤖 KRB Ticket Started");
-    console.log(`👤 ${client.user?.tag}`);
-    console.log(`🌐 ${client.guilds.cache.size} Servers`);
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━");
-
-});
-
-client.login(process.env.TOKEN);
+})();
